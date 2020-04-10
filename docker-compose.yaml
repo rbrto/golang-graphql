@@ -12,21 +12,22 @@ services:
       - couchdb 
     environment:
       COUCHBASE_HOST: couchdb
-      COUCHDB_USER: admin
-      COUCHDB_PASSWORD: password      
-    networks:
-      - backend
-
+      COUCHDB_USER: Administrator
+      COUCHDB_PASSWORD: password
+      COUCHBASE_BUCKET: restful
+  
   couchdb:
-    image: couchdb
+    build:
+      context: ./couchbase
+      dockerfile: Dockerfile
     ports:
-      - 5984:5984
-    restart: unless-stopped
-    networks:
-      - backend
+      - 8091:8091
+      - 8092:8092
+      - 8093:8093
+      - 8094:8094
+      - 11210:11210
     environment:
-      COUCHDB_USER: admin
-      COUCHDB_PASSWORD: password     
-
-networks:
-  backend:    
+      COUCHBASE_ADMINISTRATOR_USERNAME: Administrator
+      COUCHBASE_ADMINISTRATOR_PASSWORD: password
+      COUCHBASE_BUCKET: restful  
+      COUCHBASE_BUCKET_PASSWORD:

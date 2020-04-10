@@ -82,7 +82,14 @@ func RegisterEndpoint(response http.ResponseWriter, request *http.Request) {
 	hash, _ := bcrypt.GenerateFromPassword([]byte(author.Password), 10)
 	author.Password = string(hash)
 	author.Type = "author"
-	bucket.Insert(author.Id, author, 0)
+
+	_, err = bucket.Insert(author.Id, author, 0)
+
+	if err != nil {
+		response.WriteHeader(500)
+		response.Write([]byte(`{ "message": "` + err.Error() + `" }`))
+		return
+	}
 	json.NewEncoder(response).Encode(author)
 }
 

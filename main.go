@@ -211,11 +211,13 @@ var rootMutation *graphql.Object = graphql.NewObject(graphql.ObjectConfig{
 func main() {
 	fmt.Println("Starting the application...")
 	cluster, _ := gocb.Connect("couchbase://" + os.Getenv("COUCHBASE_HOST"))
+
 	cluster.Authenticate(gocb.PasswordAuthenticator{
 		Username: os.Getenv("COUCHDB_USER"),
 		Password: os.Getenv("COUCHDB_PASSWORD"),
 	})
-	bucket, _ = cluster.OpenBucket("graphql", "")
+
+	bucket, _ = cluster.OpenBucket(os.Getenv("COUCHBASE_BUCKET"), "")
 	router := mux.NewRouter()
 	schema, _ := graphql.NewSchema(graphql.SchemaConfig{
 		Query:    rootQuery,
