@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    depends_on: 
+      - couchdb 
+    environment:
+      COUCHBASE_HOST: couchdb
+      COUCHDB_USER: admin
+      COUCHDB_PASSWORD: password      
+    networks:
+      - backend
+
+  couchdb:
+    image: couchdb
+    ports:
+      - 5984:5984
+    restart: unless-stopped
+    networks:
+      - backend
+    environment:
+      COUCHDB_USER: admin
+      COUCHDB_PASSWORD: password     
+
+networks:
+  backend:    
